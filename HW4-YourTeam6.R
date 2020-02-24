@@ -12,6 +12,8 @@
 # Intall packages and set functions that we will need for this HW
 install.packages("tm")
 library("tm")
+install.packages ("SnowballC") #added
+library(SnowballC) #added
 install.packages("e1071")
 library("e1071")
 install.packages("gmodels")
@@ -37,11 +39,12 @@ tweeter_traning$Sentiment <- factor(tweeter_traning$Sentiment)
 
 # The follwoing functions allow the user to convert all text to lowercase, remove numbers,
 # stop words, punctuations, and strip blank spaces from the tweets in the "Sentiment" column
-tweeter_corpus <- Corpus(VectorSource(tweeter_traning$SentimentText))
-corpus_clean <- tm_map(tweeter_corpus, tolower)
+tweeter_corpus <- VCorpus(VectorSource(tweeter_traning$SentimentText)) #added V infront of Corpus
+corpus_clean <- tm_map(tweeter_corpus, content.transformer(tolower)) #added content.transformer()
 corpus_clean <- tm_map(corpus_clean, removeNumbers)
 corpus_clean <- tm_map(corpus_clean, removeWords, stopwords())
 corpus_clean <- tm_map(corpus_clean, removePunctuation)
+corpus_clean <- tm_map(corpus_clean, stemDocuments) #added this line of code from the book
 corpus_clean <- tm_map(corpus_clean, stripWhitespace)
 
 # Convert the data into a sparse matrix
